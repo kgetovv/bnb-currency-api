@@ -7,7 +7,6 @@ import net.pb.currency.bnb.dto.CurrencyWrapperDTO;
 import net.pb.currency.bnb.mapper.CurrencyMapper;
 import net.pb.currency.bnb.repository.CurrencyRepository;
 import net.pb.currency.bnb.utils.JAXBUtils;
-import org.apache.catalina.webresources.EmptyResource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import javax.xml.bind.JAXBException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
