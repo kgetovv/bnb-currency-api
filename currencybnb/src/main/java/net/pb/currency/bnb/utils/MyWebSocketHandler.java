@@ -1,5 +1,6 @@
 package net.pb.currency.bnb.utils;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -9,24 +10,27 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @Component
 public class MyWebSocketHandler extends TextWebSocketHandler {
-
-    private final List<WebSocketSession> sessions = new ArrayList<>();
+    private final List<WebSocketSession> sessions = Collections.synchronizedList(new ArrayList<>());
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) {
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) throws IOException {
         log.info("Connection established.");
         sessions.add(session);
+        if (session.isOpen()) {
+            session.sendMessage(new TextMessage("Success :)"));
+        }
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
         log.info("Connection closed.");
-        sessions.removeIf(s -> !s.isOpen());
+        sessions.remove(session);
     }
 
     public void sendMessageToAll(String message) {

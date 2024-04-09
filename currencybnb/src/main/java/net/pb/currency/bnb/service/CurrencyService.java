@@ -17,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,7 +73,7 @@ public class CurrencyService {
 
     public List<CurrencyDTO> performBnbCurrencySearchAndSendThroughWebSocket() {
         List<CurrencyDTO> currencyDTOList = performBnbCurrencySearch();
-        if (currencyDTOList != null) {
+        if (currencyDTOList != null && !currencyDTOList.isEmpty()) {
             try {
                 String jsonString = new ObjectMapper().writeValueAsString(currencyDTOList);
                 log.info("Currency data from BNB as jsonString: " + jsonString);
@@ -85,6 +82,6 @@ public class CurrencyService {
                 log.error("Error processing the JSON at performBnbCurrencySearchAndSendThroughWebSocket", e);
             }
         }
-        return currencyDTOList;
+        return currencyDTOList != null ? new ArrayList<>(currencyDTOList) : new ArrayList<>();
     }
 }
