@@ -1,25 +1,22 @@
 package net.pb.currency.bnb.config;
 
+import net.pb.currency.bnb.utils.MyWebSocketHandler;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.config.EnableWebFlux;
-import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-//@Configuration
-//@EnableWebFlux
-public class WebSocketConfig implements WebFluxConfigurer {
+@Configuration
+@EnableWebSocket
+public class WebSocketConfig implements WebSocketConfigurer {
 
-//    @Bean
-//    public WebSocketHandlerAdapter handlerAdapter() {
-//        return new WebSocketHandlerAdapter();
-//    }
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(myWebSocketHandler(), "/bnb-data-subscription").setAllowedOrigins("*");
+    }
 
-//    @Bean
-//    public SimpleUrlHandlerMapping urlHandlerMapping(CurrencyService currencyService) {
-//        Map<String, WebSocketHandler> urlMap = new HashMap<>();
-//        urlMap.put("/currency/search", currencyService);
-//        SimpleUrlHandlerMapping handlerMapping = new SimpleUrlHandlerMapping();
-//        handlerMapping.setOrder(1);
-//        handlerMapping.setUrlMap(urlMap);
-//        return handlerMapping;
-//    }
+    public WebSocketHandler myWebSocketHandler() {
+        return new MyWebSocketHandler();
+    }
 }
